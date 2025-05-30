@@ -4,70 +4,83 @@
 # Extend Flask backend to support search functionality
 from flask import Flask, request, jsonify, render_template
 import sqlite3
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-def init_db():
-    conn = sqlite3.connect('jobs.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS jobs (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    title TEXT NOT NULL,
-                    company TEXT NOT NULL,
-                    location TEXT NOT NULL,
-                    job_type TEXT NOT NULL,
-                    salary TEXT,
-                    skills TEXT,
-                    description TEXT
-                )''')
-    conn.commit()
-    conn.close()
 
-@app.route('/api/jobs', methods=['GET'])
-def get_jobs():
-    query = request.args.get('q', '').strip()
-    conn = sqlite3.connect('jobs.db')
-    c = conn.cursor()
-    if query:
-        c.execute('''SELECT * FROM jobs WHERE 
-                        title LIKE ? OR 
-                        company LIKE ? OR 
-                        location LIKE ? OR 
-                        job_type LIKE ? OR 
-                        salary LIKE ? OR 
-                        skills LIKE ? OR 
-                        description LIKE ?''',
-                  tuple([f"%{query}%"] * 7))
-    else:
-        c.execute('SELECT * FROM jobs')
-    jobs = [dict(id=row[0], title=row[1], company=row[2], location=row[3],
-                 job_type=row[4], salary=row[5], skills=row[6], description=row[7])
-            for row in c.fetchall()]
-    conn.close()
-    return jsonify(jobs)
+conn = sqlite3.connect('users.db')
+cursor = conn.cursor()
 
-@app.route('/api/jobs', methods=['POST'])
-def add_job():
-    data = request.get_json()
-    conn = sqlite3.connect('jobs.db')
-    c = conn.cursor()
-    c.execute('''INSERT INTO jobs (title, company, location, job_type, salary, skills, description)
-                 VALUES (?, ?, ?, ?, ?, ?, ?)''',
-              (data['title'], data['company'], data['location'],
-               data['job_type'], data['salary'], data['skills'], data['description']))
-    conn.commit()
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    full_name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    phone TEXT,
+    password TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+)
+''')
+
+# Insert dummy user (for testing)
+cursor.execute('''
+INSERT OR IGNORE INTO users (email, full_name, phone, password)
+VALUES ('john.doe@example.com', 'John Doe', '+1 (555) 123-4567', 'password123')
+''')
+
+conn.commit()
+conn.close()
+
+
+
+def get_user(email):
+    conn = sqlite3.connect('users.db')
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE email = ?", (email,))
+    user = cur.fetchone()
     conn.close()
-    return jsonify({'status': 'success'}), 201
+    return user
+
+@app.route('/get_user', methods=['POST'])
+def get_user_data():
+    email = request.json.get('email')
+    user = get_user(email)
+    if user:
+        return jsonify({
+            "full_name": user["full_name"],
+            "email": user["email"],
+            "phone": user["phone"],
+            "created_at": user["created_at"]
+        })
+    return jsonify({"error": "User not found"}), 404
+
+@app.route('/update_password', methods=['POST'])
+def update_password():
+    email = request.json.get('email')
+    current_password = request.json.get('current_password')
+    new_password = request.json.get('new_password')
+
+    user = get_user(email)
+    if user and user["password"] == current_password:  # You should use hashed passwords!
+        conn = sqlite3.connect('users.db')
+        cur = conn.cursor()
+        cur.execute("UPDATE users SET password = ? WHERE email = ?", (new_password, email))
+        conn.commit()
+        conn.close()
+        return jsonify({"success": True})
+    return jsonify({"error": "Incorrect current password"}), 400
+
+
 
 @app.route('/')
 def index():
-    return render_template('browse_job.html')
-@app.route('/account')
-def index():
-    return render_template('browse_job.html')
+    return render_template('account.html')
+
 
 
 
 if __name__ == '__main__':
-    init_db()
+    
     app.run(debug=True)

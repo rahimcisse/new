@@ -332,6 +332,72 @@
     </div>
 
     <script>
+        const userEmail = 'john.doe@example.com'; // replace with dynamic login session
+
+        // Fetch user data and populate fields
+        fetch('/get_user', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email: userEmail })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.error) {
+                document.getElementById('fullname-display').innerText = data.full_name;
+                document.getElementById('email-display').innerText = data.email;
+                document.getElementById('phone-display').innerText = data.phone;
+                document.getElementById('created-display').innerText = data.created_at;
+            }
+        });
+
+        // Password update
+        document.getElementById('password-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const current = document.getElementById('current-password').value;
+            const newPass = document.getElementById('new-password').value;
+            const confirm = document.getElementById('confirm-password').value;
+            const errorDiv = document.getElementById('password-error');
+
+            if (newPass !== confirm) {
+                errorDiv.innerText = "New passwords do not match.";
+                errorDiv.classList.remove("hidden");
+                return;
+            }
+
+            fetch('/update_password', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    email: userEmail,
+                    current_password: current,
+                    new_password: newPass
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('success-modal').classList.add('show');
+                    errorDiv.classList.add("hidden");
+                } else {
+                    errorDiv.innerText = data.error;
+                    errorDiv.classList.remove("hidden");
+                }
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('success-modal').classList.remove('show');
+        }
+
+        function togglePassword(id, el) {
+            const input = document.getElementById(id);
+            const isHidden = input.type === "password";
+            input.type = isHidden ? "text" : "password";
+            el.classList.toggle('ri-eye-line');
+            el.classList.toggle('ri-eye-off-line');
+        }
+      
         // Dark mode functionality
         const toggle = document.getElementById('darkModeToggle');
         const icon = document.getElementById('themeIcon');
@@ -376,95 +442,13 @@
                         }
                     }
                 });
-            }
+                   }
+                }); 
+        
             
-// Replace the simulated user data fetch with this real implementation
-async function fetchUserData() {
-    try {
-        const response = await fetch('/api/user');
-        if (!response.ok) {
-            throw new Error('Failed to fetch user data');
-        }
-        const userData = await response.json();
-        
-        // Update the DOM with real user data
-        document.getElementById('username-display').textContent = userData.username;
-        document.getElementById('fullname-display').textContent = userData.fullname;
-        document.getElementById('email-display').textContent = userData.email;
-        document.getElementById('phone-display').textContent = userData.phone;
-        document.getElementById('created-display').textContent = new Date(userData.created).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        
-        // Update membership display if you have one
-        const membershipElement = document.querySelector('.text-gray-500.dark\\:text-gray-400.text-sm');
-        if (membershipElement) {
-            membershipElement.textContent = userData.membership + ' Member';
-        }
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-        // You might want to show an error message to the user
-    }
-}
 
-// Call this when the page loads
-window.addEventListener('DOMContentLoaded', fetchUserData);})
 
-document.getElementById('password-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const currentPassword = document.getElementById('current-password').value;
-    const newPassword = document.getElementById('new-password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
-    const errorElement = document.getElementById('password-error');
-    
-    // Reset error message
-    errorElement.classList.add('hidden');
-    
-    // Client-side validation
-    if (newPassword !== confirmPassword) {
-        errorElement.textContent = "New passwords don't match!";
-        errorElement.classList.remove('hidden');
-        return;
-    }
-    
-    if (newPassword.length < 8) {
-        errorElement.textContent = "Password must be at least 8 characters long!";
-        errorElement.classList.remove('hidden');
-        return;
-    }
-    
-    try {
-        const response = await fetch('/api/user/password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                currentPassword,
-                newPassword,
-                confirmPassword
-            })
-        });
-        
-        const result = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(result.error || 'Failed to update password');
-        }
-        
-        // Show success modal
-        document.getElementById('success-modal').classList.add('show');
-        
-        // Clear form
-        document.getElementById('password-form').reset();
-    } catch (error) {
-        errorElement.textContent = error.message;
-        errorElement.classList.remove('hidden');
-    }
-});
+
     </script>
 </body>
 </html>
