@@ -237,7 +237,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="sidebar-link flex items-center p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
+                                <a href="login_page" class="sidebar-link flex items-center p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
                                     <i class="ri-logout-box-r-line mr-3"></i>
                                     <span>Logout</span>
                                 </a>
@@ -330,58 +330,65 @@
     </div>
 
     <script>
-        const userEmail = 'john.doe@example.com'; // replace with dynamic login session
-
-        // Fetch user data and populate fields
-        fetch('/get_user', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ email: userEmail })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (!data.error) {
-                document.getElementById('fullname-display').innerText = data.full_name;
-                document.getElementById('email-display').innerText = data.email;
-                document.getElementById('phone-display').innerText = data.phone;
-                document.getElementById('created-display').innerText = data.created_at;
-            }
-        });
+        fetch('/get_user')
+            .then(res => res.json())
+            .then(data => {
+                if (!data.error) {
+                    document.getElementById('fullname-display').innerText = data.full_name;
+                    document.getElementById('email-display').innerText = data.email;
+                    document.getElementById('phone-display').innerText = data.phone;
+                    document.getElementById('created-display').innerText = data.created_at;
+                }
+            });
 
         // Password update
-        document.getElementById('password-form').addEventListener('submit', function(e) {
+        document.getElementById('password-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const current = document.getElementById('current-password').value;
             const newPass = document.getElementById('new-password').value;
             const confirm = document.getElementById('confirm-password').value;
             const errorDiv = document.getElementById('password-error');
-
+            
+            // Client-side validation
             if (newPass !== confirm) {
-                errorDiv.innerText = "New passwords do not match.";
+                errorDiv.textContent = "Passwords must match";
                 errorDiv.classList.remove("hidden");
                 return;
             }
-
-            fetch('/update_password', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    email: userEmail,
-                    current_password: current,
-                    new_password: newPass
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
+            
+            if (newPass.length < 8) {
+                errorDiv.textContent = "Password must be at least 8 characters";
+                errorDiv.classList.remove("hidden");
+                return;
+            }
+            
+            try {
+                const response = await fetch('/update_password', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        current_password: current,
+                        new_password: newPass,
+                        confirm_password: confirm
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Show success modal
                     document.getElementById('success-modal').classList.add('show');
-                    errorDiv.classList.add("hidden");
+                    // Reset form
+                    document.getElementById('password-form').reset();
                 } else {
-                    errorDiv.innerText = data.error;
+                    errorDiv.textContent = data.error || "Failed to update password";
                     errorDiv.classList.remove("hidden");
                 }
-            });
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.textContent = "An unexpected error occurred";
+                errorDiv.classList.remove("hidden");
+            }
         });
 
         function closeModal() {

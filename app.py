@@ -1,6 +1,6 @@
 # new animated signup
 # Extend Flask backend to support search functionality
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask import Flask, request, jsonify, render_template, redirect, url_for,session
 import sqlite3
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -103,6 +103,7 @@ class User(db.Model):
     name = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -121,7 +122,7 @@ def signup():
     if User.query.filter_by(email=email).first():
         return jsonify({'error': 'Email already registered'}), 400
 
-    new_user = User(name=name, email=email)
+    new_user = User(name=name, email=email, created_at=datetime.utcnow())
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
@@ -133,14 +134,28 @@ def login():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
-
     user = User.query.filter_by(email=email).first()
-
     if user and user.check_password(password):
+        session['user_id'] = user.id  # Store user ID in session
         return jsonify({'message': 'Login successful'})
     else:
         return jsonify({'error': 'Invalid email or password'}), 401
-
+    
+app.config['SECRET_KEY'] = '12345678'
+@app.route('/get_user', methods=['GET'])
+def get_user():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not logged in'}), 401
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    return jsonify({
+        'full_name': user.name,
+        'email': user.email,
+        # 'phone': user.phone,
+        'created_at': user.created_at.strftime('%B %d, %Y')  # Format the date
+    })
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
