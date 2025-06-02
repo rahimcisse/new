@@ -1,6 +1,5 @@
 
 
-
 # Extend Flask backend to support search functionality
 from flask import Flask, request, jsonify, render_template
 import sqlite3
