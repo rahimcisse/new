@@ -9,6 +9,10 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 @app.route("/")
+@app.route("/landing")
+def landing():
+    return render_template('landing.html')
+
 @app.route("/index")
 def index():
     return render_template('index.html')
