@@ -156,6 +156,43 @@ def get_user():
         # 'phone': user.phone,
         'created_at': user.created_at.strftime('%B %d, %Y')  # Format the date
     })
+
+@app.route('/update_password', methods=['POST'])
+def update_password():
+    # Get user from session
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
+    data = request.get_json()
+    current_password = data.get('current_password')
+    new_password = data.get('new_password')
+    confirm_password = data.get('confirm_password')
+    
+    # Validate input
+    if not all([current_password, new_password, confirm_password]):
+        return jsonify({'error': 'Missing required fields'}), 400
+    
+    # Password validation
+    if new_password != confirm_password:
+        return jsonify({'error': 'Passwords do not match'}), 400
+    
+    if len(new_password) < 8:
+        return jsonify({'error': 'Password must be at least 8 characters'}), 400
+    
+    # Verify current password
+    if not user.check_password(current_password):
+        return jsonify({'error': 'Current password is incorrect'}), 401
+    
+    # Update password (Werkzeug handles hashing automatically)
+    user.set_password(new_password)  # Uses generate_password_hash internally
+    db.session.commit()
+    
+    return jsonify({'message': 'Password updated successfully'}), 200
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
