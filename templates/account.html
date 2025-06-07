@@ -212,8 +212,8 @@
                             <i class="ri-user-line text-indigo-500 dark:text-indigo-400 text-2xl"></i>
                         </div>
                         <div class="ml-4">
-                            <h2 class="font-semibold text-lg" id="username-display">John Doe</h2>
-                            <span class="text-gray-500 dark:text-gray-400 text-sm">Premium Member</span>
+                            <h2 class="font-semibold text-lg" id="username-display"></h2>
+                            <span class="text-gray-500 dark:text-gray-400 text-sm"></span>
                         </div>
                     </div>
                     <nav>
@@ -247,35 +247,72 @@
                 </div>
             </aside>
 
+
+            
             <!-- Main Content -->
-            <main class="w-full lg:w-3/4">
-                <!-- Profile Information -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-semibold">Profile Information</h2>
-                        <button class="text-primary dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center">
-                            <i class="ri-edit-line mr-2"></i> Edit
-                        </button>
+<!-- w wekbjkkjewkjkjwkabubcuhwcuwhcbwjhbcwjkbjhwbcjhbwcjbqhcvqhcqjhchjqcqjh cjhq chjq chj0 -->
+
+
+
+            <!-- Replace the current profile information section with this -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold">Profile Information</h2>
+                    <button id="editProfileBtn" class="text-primary dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center">
+                        <i class="ri-edit-line mr-2"></i> Edit
+                    </button>
+                </div>
+                
+                <!-- View Mode (default) -->
+                <div id="profileViewMode" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Full Name</label>
+                        <p class="text-gray-900 dark:text-gray-100" id="fullname-display"></p>
                     </div>
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Email Address</label>
+                        <p class="text-gray-900 dark:text-gray-100" id="email-display"></p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Phone Number</label>
+                        <p class="text-gray-900 dark:text-gray-100" id="phone-display"></p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Account Created</label>
+                        <p class="text-gray-900 dark:text-gray-100" id="created-display"></p>
+                    </div>
+                </div>
+                
+                <!-- Edit Mode (hidden by default) -->
+                <form id="profileEditForm" class="hidden space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Full Name</label>
-                            <p class="text-gray-900 dark:text-gray-100" id="fullname-display">John Doe</p>
+                            <label for="edit-fullname" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Full Name</label>
+                            <input type="text" id="edit-fullname" class="w-full px-4 py-2 border dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-gray-100" required>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Email Address</label>
-                            <p class="text-gray-900 dark:text-gray-100" id="email-display">john.doe@example.com</p>
+                            <label for="edit-email" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Email Address</label>
+                            <input type="email" id="edit-email" class="w-full px-4 py-2 border dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-gray-100" required>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Phone Number</label>
-                            <p class="text-gray-900 dark:text-gray-100" id="phone-display">+1 (555) 123-4567</p>
+                            <label for="edit-phone" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Phone Number</label>
+                            <input type="tel" id="edit-phone" class="w-full px-4 py-2 border dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700 dark:text-gray-100">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Account Created</label>
                             <p class="text-gray-900 dark:text-gray-100" id="created-display">January 15, 2022</p>
                         </div>
                     </div>
-                </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="cancelEditBtn" class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium py-2 px-6 rounded-lg transition duration-200">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-primary hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center">
+                            <i class="ri-save-line mr-2"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
 
                 <!-- Change Password -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -451,7 +488,103 @@
                 }); 
         
             
+            // Add this to your existing JavaScript code
 
+            // Get elements
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const profileViewMode = document.getElementById('profileViewMode');
+            const profileEditForm = document.getElementById('profileEditForm');
+
+            // Form fields
+            const fullnameInput = document.getElementById('edit-fullname');
+            const emailInput = document.getElementById('edit-email');
+            const phoneInput = document.getElementById('edit-phone');
+
+            // Display elements
+            const fullnameDisplay = document.getElementById('fullname-display');
+            const emailDisplay = document.getElementById('email-display');
+            const phoneDisplay = document.getElementById('phone-display');
+
+            // Toggle between view and edit modes
+            function toggleEditMode(isEdit) {
+                if (isEdit) {
+                    // Switch to edit mode
+                    profileViewMode.classList.add('hidden');
+                    profileEditForm.classList.remove('hidden');
+                    editProfileBtn.classList.add('hidden');
+                    
+                    // Populate form with current values
+                    fullnameInput.value = fullnameDisplay.textContent;
+                    emailInput.value = emailDisplay.textContent;
+                    phoneInput.value = phoneDisplay.textContent;
+                } else {
+                    // Switch back to view mode
+                    profileViewMode.classList.remove('hidden');
+                    profileEditForm.classList.add('hidden');
+                    editProfileBtn.classList.remove('hidden');
+                }
+            }
+
+            // Event listeners
+            editProfileBtn.addEventListener('click', () => toggleEditMode(true));
+            cancelEditBtn.addEventListener('click', () => toggleEditMode(false));
+
+            // Handle form submission
+            profileEditForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const data = {
+                    full_name: fullnameInput.value,
+                    email: emailInput.value,
+                    phone: phoneInput.value
+                };
+                
+                try {
+                    const response = await fetch('/update_profile', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        // Update displayed values
+                        fullnameDisplay.textContent = data.full_name;
+                        emailDisplay.textContent = data.email;
+                        phoneDisplay.textContent = data.phone;
+                        
+                        // Show success message (you can use your existing modal)
+                        document.getElementById('success-modal').classList.add('show');
+                        
+                        // Switch back to view mode
+                        toggleEditMode(false);
+                    } else {
+                        // Show error message
+                        const errorDiv = document.getElementById('password-error'); // Reusing existing error div
+                        errorDiv.textContent = result.error || "Failed to update profile";
+                        errorDiv.classList.remove("hidden");
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    const errorDiv = document.getElementById('password-error');
+                    errorDiv.textContent = "An unexpected error occurred";
+                    errorDiv.classList.remove("hidden");
+                }
+            });
+
+            // Initial fetch of user profile data
+            fetch('/get_profile')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.error) {
+                        fullnameDisplay.innerText = data.full_name;
+                        emailDisplay.innerText = data.email;
+                        phoneDisplay.innerText = data.phone || '';
+                        document.getElementById('created-display').innerText = data.created_at;
+                    }
+                });
 
 
     </script>

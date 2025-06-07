@@ -215,7 +215,7 @@ def send_otp():
 
     try:
         msg = EmailMessage()
-        msg['Subject'] = "OTPVerification - ICONNECTt"
+        msg['Subject'] = "OTPVerification - ICONNECT"
         msg['From'] = EMAIL_ADDRESS
         msg['To'] = email
         msg.set_content(f"Thank you for signing up! To verify your email address and complete the sign-up process, please enter the following one-time password (OTP) on our website: {otp}")
@@ -242,7 +242,87 @@ def verify_otp():
     else:
         return jsonify({'error': 'Invalid OTP'}), 400
 
+@app.route('/get_profile', methods=['GET'])
+def get_profile():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
+    return jsonify({
+        'full_name': user.name,
+        'email': user.email,
+        'phone': user.phone if hasattr(user, 'phone') else '',
+        'created_at': user.created_at.strftime('%B %d, %Y')
+    })
+@app.route('/update_profile', methods=['POST'])
+def update_profile():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
+    data = request.get_json()
+    full_name = data.get('full_name')
+    email = data.get('email')
+    phone = data.get('phone')
+    
+    # Validate input
+    if not full_name or not email:
+        return jsonify({'error': 'Name and email are required'}), 400
+    
+    # Check if email is already taken by another user
+    existing_user = User.query.filter(User.email == email, User.id != user_id).first()
+    if existing_user:
+        return jsonify({'error': 'Email already in use'}), 400
+    
+    # Update user information
+    user.name = full_name
+    user.email = email
+    if phone:
+        user.phone = phone
+    
+    db.session.commit()
+    
+    return jsonify({'message': 'Profile updated successfully'})
 
+# New route to update profile details
+@app.route('/api/update_profile_details', methods=['POST'])
+def update_profile_details():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
+    data = request.get_json()
+    phone = data.get('phone')
+    gender = data.get('gender')
+    location = data.get('location')
+    
+    # Update user information
+    user.phone = phone
+    user.gender = gender
+    user.location = location
+    
+    db.session.commit()
+    
+    return jsonify({'message': 'Profile details updated successfully'})
+
+# New route for the details page
+@app.route('/details')
+def details():
+    if 'user_id' not in session:
+        return redirect('/login_page')
+    return render_template('details.html')
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
