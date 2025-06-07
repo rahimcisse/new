@@ -136,6 +136,15 @@
                                 <input type="email" id="signupEmail" class="input-field w-full pl-10 pr-4 py-3 rounded-lg bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none" placeholder="your@email.com" required>
                             </div>
                         </div>
+
+                        <button onclick="sendOTP()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-4">
+                         Send OTP
+                        </button>
+                            <div id="otpSection" class="hidden">
+      <input id="otpcode" type="text" placeholder="Enter OTP"
+        class="w-full p-2 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      
+    </div>
                         
                         <div>
                             <label for="signupPassword" class="block text-sm font-medium text-white mb-1">Password</label>
@@ -192,120 +201,195 @@
         </div>
     </div>
 
-    <script>
-        // Updated JavaScript to work with Flask + SQLAlchemy backend
+<!DOCTYPE html>
+<html lang="en">
+<!-- ... [rest of your HTML remains the same until the JavaScript section] ... -->
 
-        // DOM Elements
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const toggleForms = document.querySelectorAll('.toggle-forms');
-        const toggleLoginPassword = document.getElementById('toggleLoginPassword');
-        const toggleSignupPassword = document.getElementById('toggleSignupPassword');
-        const loginPassword = document.getElementById('loginPassword');
-        const signupPassword = document.getElementById('signupPassword');
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
+<script>
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const toggleForms = document.querySelectorAll('.toggle-forms');
+    const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+    const toggleSignupPassword = document.getElementById('toggleSignupPassword');
+    const loginPassword = document.getElementById('loginPassword');
+    const signupPassword = document.getElementById('signupPassword');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    const otpSection = document.getElementById('otpSection');
+    const otpCode = document.getElementById('otpcode');
 
-        // Toggle between login and signup forms
-        toggleForms.forEach(button => {
-            button.addEventListener('click', function() {
-                loginForm.classList.toggle('hidden');
-                signupForm.classList.toggle('hidden');
-            });
+    // Toggle between login and signup forms
+    toggleForms.forEach(button => {
+        button.addEventListener('click', function() {
+            loginForm.classList.toggle('hidden');
+            signupForm.classList.toggle('hidden');
         });
+    });
 
-        // Toggle password visibility
-        toggleLoginPassword.addEventListener('click', function() {
-            const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-            loginPassword.setAttribute('type', type);
-            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-        });
-
-        toggleSignupPassword.addEventListener('click', function() {
-            const type = signupPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-            signupPassword.setAttribute('type', type);
-            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-        });
-
-        // Show toast notification
         function showToast(message, isError = false) {
-            toastMessage.textContent = message;
-            toast.className = isError 
-                ? 'fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300 flex items-center'
-                : 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300 flex items-center';
+      const toast = document.getElementById('toast');
+      toast.innerText = message;
+      toast.className = `mt-4 p-2 text-center text-white rounded ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 4000);
+    }
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.innerText = message;
+      toast.className = `mt-4 p-2 text-center text-white rounded ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 4000);
+    }
 
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-10', 'opacity-0');
-            }, 3000);
+    async function sendOTP() {
+      const email = document.getElementById('signupEmail').value;
+      document.getElementById('otpSection').classList.remove('hidden');
+
+      if (!email) {
+        showToast('Please enter your email', true);
+        return;
+      }
+
+      const response = await fetch('/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+        
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showToast('OTP sent to your email!');
+
+      } else {
+        showToast(data.error || 'Failed to send OTP', true);
+      }
+    }
+
+
+
+    // Toggle password visibility
+    toggleLoginPassword.addEventListener('click', function() {
+        const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        loginPassword.setAttribute('type', type);
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    toggleSignupPassword.addEventListener('click', function() {
+        const type = signupPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        signupPassword.setAttribute('type', type);
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    // Show toast notification
+    function showToast(message, isError = false) {
+        toastMessage.textContent = message;
+        toast.className = isError 
+            ? 'fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300 flex items-center'
+            : 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-all duration-300 flex items-center';
+        setTimeout(() => {
+            toast.classList.remove('translate-y-0', 'opacity-100');
+            toast.classList.add('translate-y-10', 'opacity-0');
+        }, 3000);
+    }
+
+    // Login form submission
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        if (response.ok) {
+            showToast(data.message);
+            window.location.href = '/index';
+        } else {
+            showToast(data.error || 'Login failed', true);
         }
+    });
 
-        // Login form submission
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            const response = await fetch('/api/login', {
+    // Signup form submission with integrated OTP
+    signupForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('signupConfirmPassword').value;
+        const terms = document.getElementById('terms').checked;
+        
+        // Validate inputs
+        if (password !== confirmPassword) {
+            showToast('Passwords do not match', true);
+            return;
+        }
+        
+        if (!terms) {
+            showToast('You must accept the terms and conditions', true);
+            return;
+        }
+        
+        if (password.length < 8 || !/\d/.test(password)) {
+            showToast('Password must be at least 8 characters with at least one number', true);
+            return;
+        }
+        
+        // Check if OTP is provided
+        const otp = otpCode.value;
+        if (!otp) {
+            showToast('Please enter the OTP sent to your email', true);
+            return;
+        }
+        
+        try {
+            // First send OTP to verify
+            const otpResponse = await fetch('/verify-otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email, otp })
             });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                showToast(data.message);
-                window.location.href = '/index';
-            } else {
-                showToast(data.error || 'Login failed', true);
-            }
-        });
-
-        // Signup form submission
-        signupForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('signupConfirmPassword').value;
-            const terms = document.getElementById('terms').checked;
-
-            if (password !== confirmPassword) {
-                showToast('Passwords do not match', true);
+            
+            const otpData = await otpResponse.json();
+            
+            if (!otpResponse.ok ) {
+                showToast(otpData.error || 'Invalid OTP', true);
                 return;
             }
-
-            if (!terms) {
-                showToast('You must accept the terms and conditions', true);
-                return;
-            }
-
-            if (password.length < 8 || !/\d/.test(password)) {
-                showToast('Password must be at least 8 characters with at least one number', true);
-                return;
-            }
-
-            const response = await fetch('/api/signup', {
+            
+            // OTP verified, proceed with signup
+            const signupResponse = await fetch('/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, password })
             });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                showToast(data.message);
+            
+            const signupData = await signupResponse.json();
+            
+            if (signupResponse.ok) {
+                showToast(signupData.message || 'Account created successfully');
                 loginForm.classList.remove('hidden');
                 signupForm.classList.add('hidden');
                 this.reset();
+                otpCode.value = '';
             } else {
-                showToast(data.error || 'Signup failed', true);
+                showToast(signupData.error || 'Signup failed', true);
             }
-        });
-
-    </script>
+        } catch (error) {
+            showToast('An error occurred during signup', true);
+            console.error(error);
+        }
+    });
+</script>
+</body>
+</html>
 </body>
 </html>

@@ -6,6 +6,9 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
+import random
+import smtplib
+from email.message import EmailMessage
 app = Flask(__name__)
 
 @app.route("/")
@@ -193,6 +196,53 @@ def update_password():
     db.session.commit()
     
     return jsonify({'message': 'Password updated successfully'}), 200
+
+EMAIL_ADDRESS = 'abdulrahimmogtaricisse@gmail.com'
+EMAIL_PASSWORD = 'nshb szsc saaa tzio'
+
+
+@app.route('/send-otp', methods=['POST'])
+def send_otp():
+    data = request.get_json()
+    email = data.get('email')
+
+    if not email:
+        return jsonify({'error': 'Email is required'}), 400
+
+    otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+    session['otp'] = otp
+    session['email'] = email
+
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = "OTPVerification - ICONNECTt"
+        msg['From'] = EMAIL_ADDRESS
+        msg['To'] = email
+        msg.set_content(f"Thank you for signing up! To verify your email address and complete the sign-up process, please enter the following one-time password (OTP) on our website: {otp}")
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+
+        return jsonify({'message': 'OTP sent successfully'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/verify-otp', methods=['POST'])
+def verify_otp():
+    data = request.get_json()
+    entered_otp = data.get('otp')
+
+    if entered_otp == session.get('otp'):
+        return jsonify({'message': 'OTP verified successfully'})
+    else:
+        return jsonify({'error': 'Invalid OTP'}), 400
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

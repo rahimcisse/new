@@ -370,4 +370,14 @@ DEFAULT:'8px',
                 accountDropdown.classList.remove('show');
             }
         });
+
+                    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileNav = document.querySelector('nav');
+            
+            if (mobileMenuToggle && mobileNav) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mobileNav.classList.toggle('hidden');
+                });
+
+            }
 </script>
