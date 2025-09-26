@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iconnect - Browse Jobs</title>
+<title>Iconnect - Browse clients</title>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
 <script>
 tailwind.config = {
@@ -155,8 +155,8 @@ DEFAULT:'8px',
                 <a href="#" class="text-2xl font-['Pacifico'] text-primary mr-10">Iconnect</a>
                 <nav class="hidden md:flex space-x-8">
                     <a href="index" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary font-medium">Home</a>
-                    <a href="browse" class="text-primary dark:text-primary font-medium border-b-2 border-primary">Browse Workers</a>
-                    <a href="clients" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary font-medium">Browse Clients</a>
+                    <a href="browse" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary font-medium">Browse Workers</a>
+                    <a href="clients" class="text-primary dark:text-primary font-medium border-b-2 border-primary">Browse Clients</a>
                     <a href="how_it_works" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary font-medium">How It Works</a>
                     <a href="about" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary font-medium">About Us</a>
                 </nav>
@@ -211,7 +211,7 @@ DEFAULT:'8px',
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i class="ri-search-line text-gray-400"></i>
                     </div>
-                    <input type="text" id="searchInput" placeholder="Search for jobs, skills, or companies" class="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-700 dark:bg-dark-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm">
+                    <input type="text" id="searchInput" placeholder="Search for clients, skills, or companies" class="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-700 dark:bg-dark-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm">
                 </div>
                 <div class="flex items-center space-x-3 w-full md:w-auto">
                     <button class="flex items-center space-x-2 px-4 py-3 border border-gray-200 dark:border-gray-700 dark:text-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 whitespace-nowrap" id="filtersToggle">
@@ -225,8 +225,8 @@ DEFAULT:'8px',
                     <button class="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 whitespace-nowrap !rounded-button">
                         Search
                     </button>
-                    <button onclick="window.location.href = 'addJob';" class="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 whitespace-nowrap !rounded-button">
-                        Add Job
+                    <button onclick="window.location.href = 'addClient';" class="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 whitespace-nowrap !rounded-button">
+                        Add Available Job
                     </button>
                 </div>
             </div>
@@ -237,17 +237,17 @@ DEFAULT:'8px',
     <div class="filter-overlay" id="filterOverlay"></div>
     <div class="filter-panel" id="filterPanel">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-lg font-semibold">Filter Jobs</h3>
+            <h3 class="text-lg font-semibold">Filter clients</h3>
             <button id="closeFilterPanel" class="text-gray-500 hover:text-gray-700">
                 <i class="ri-close-line ri-xl"></i>
             </button>
         </div>
         
         <div class="space-y-6">
-            <!-- Job Title Filter -->
+            <!-- clients Title Filter -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job Title</label>
-                <input type="text" id="titleFilter" placeholder="Enter job title" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:outline-none">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">clients Title</label>
+                <input type="text" id="titleFilter" placeholder="Enter clients title" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:outline-none">
             </div>
             
             <!-- Location Filter -->
@@ -256,9 +256,9 @@ DEFAULT:'8px',
                 <input type="text" id="locationFilter" placeholder="Enter location" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:outline-none">
             </div>
             
-            <!-- Job Type Filter -->
+            <!-- clients Type Filter -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Job Type</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">clients Type</label>
                 <div class="space-y-2">
                     <label class="flex items-center">
                         <input type="checkbox" id="fullTimeFilter" class="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded">
@@ -308,13 +308,13 @@ DEFAULT:'8px',
         </div>
     </div>
 
-    <!-- Job Listings -->
+    <!-- clients Listings -->
     <div class="container mx-auto px-4 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Sidebar remains unchanged -->
             <div class="flex-grow">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="jobContainer">
-                    <!-- Job cards will be dynamically injected here by fetch-jobs.js -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="clientsContainer">
+                    <!-- clients cards will be dynamically injected here by fetch-clients.js -->
                 </div>
             </div>
         </div>
@@ -365,7 +365,7 @@ DEFAULT:'8px',
             <div>
                 <h4 class="text-lg font-semibold mb-4">For Workers</h4>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-400 hover:text-white">Find Jobs</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Find clients</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white">Create Profile</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white">Career Resources</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white">Success Stories</a></li>
@@ -375,7 +375,7 @@ DEFAULT:'8px',
             <div>
                 <h4 class="text-lg font-semibold mb-4">For Clients</h4>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-400 hover:text-white">Post a Job</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Post a clients</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white">Browse Talent</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white">Enterprise Solutions</a></li>
                     <li><a href="#" class="text-gray-400 hover:text-white">Success Stories</a></li>
@@ -423,11 +423,11 @@ DEFAULT:'8px',
     </div>
     
     <script>
-        // JavaScript to fetch and display jobs from the backend
+        // JavaScript to fetch and display clients from the backend
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('searchInput');
             const searchButton = Array.from(document.querySelectorAll('button')).find(btn => btn.textContent.trim() === 'Search');
-            const jobContainer = document.getElementById('jobContainer');
+            const clientsContainer = document.getElementById('clientsContainer');
             
             // Filter panel elements
             const filtersToggle = document.getElementById('filtersToggle');
@@ -456,7 +456,7 @@ DEFAULT:'8px',
                 salaryValue.textContent = this.value >= 200000 ? '$200k+' : `$${Math.floor(this.value/1000)}k`;
             });
             
-            function loadJobs(query = '', filters = {}) {
+            function loadclients(query = '', filters = {}) {
                 // Build the filter query string
                 let filterQuery = '';
                 if (Object.keys(filters).length > 0) {
@@ -464,8 +464,8 @@ DEFAULT:'8px',
                     
                     if (filters.title) filterParams.append('title', filters.title);
                     if (filters.location) filterParams.append('location', filters.location);
-                    if (filters.jobTypes && filters.jobTypes.length > 0) {
-                        filters.jobTypes.forEach(type => filterParams.append('job_type', type));
+                    if (filters.clientsTypes && filters.clientsTypes.length > 0) {
+                        filters.clientsTypes.forEach(type => filterParams.append('clients_type', type));
                     }
                     if (filters.salaryMin) filterParams.append('salary_min', filters.salaryMin);
                     if (filters.experience) filterParams.append('experience', filters.experience);
@@ -481,22 +481,22 @@ DEFAULT:'8px',
                     finalQuery = finalQuery ? `${finalQuery}&${filterQuery}` : filterQuery;
                 }
                 
-                fetch(`/api/jobs?q=${encodeURIComponent(finalQuery)}`)
+                fetch(`/api/clients?q=${encodeURIComponent(finalQuery)}`)
                     .then(res => res.json())
-                    .then(jobs => {
-                        jobContainer.innerHTML = '';
-                        if (jobs.length === 0) {
-                            jobContainer.innerHTML = `
+                    .then(clients => {
+                        clientsContainer.innerHTML = '';
+                        if (clients.length === 0) {
+                            clientsContainer.innerHTML = `
                                 <div class="col-span-full flex flex-col items-center justify-center py-12">
                                     <i class="ri-search-line text-5xl text-gray-400 mb-4"></i>
-                                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No jobs found</h3>
+                                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No clients found</h3>
                                     <p class="text-gray-500 dark:text-gray-400 text-center max-w-md">Try adjusting your search or filter criteria to find more results.</p>
                                 </div>
                             `;
                             return;
                         }
                         
-                        jobs.forEach(job => {
+                        clients.forEach(clients => {
                             const card = document.createElement('div');
                             card.className = 'bg-white dark:bg-dark-800 rounded-lg shadow-sm hover:shadow-md transition-shadow p-6';
                             card.innerHTML = `
@@ -506,18 +506,18 @@ DEFAULT:'8px',
                                             <i class="ri-briefcase-line ri-lg text-blue-600"></i>
                                         </div>
                                         <div>
-                                            <h3 class="font-semibold text-gray-900 dark:text-white">${job.title}</h3>
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">${clients.title}</h3>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="flex flex-wrap gap-2 mb-4">
-                                    ${(job.skills || '').split(',').map(skill => `
+                                    ${(clients.skills || '').split(',').map(skill => `
                                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">${skill.trim()}</span>
                                     `).join('')}
                                 </div>
                                 <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
                                     <div class="flex items-center">
-                                        <i class="ri-map-pin-line mr-1"></i><span>${job.location}</span>
+                                        <i class="ri-map-pin-line mr-1"></i><span>${clients.location}</span>
                                     </div>
                                     <div class="flex items-center">
                                         <i class="ri-time-line mr-1"></i><span>available</span>
@@ -525,27 +525,27 @@ DEFAULT:'8px',
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <span class="font-semibold text-gray-900 dark:text-white">${job.job_type}</span>
+                                        <span class="font-semibold text-gray-900 dark:text-white">${clients.clients_type}</span>
                                     </div>
                                     <button class="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 whitespace-nowrap !rounded-button">Apply Now</button>
                                 </div>
                             `;
-                            jobContainer.appendChild(card);
+                            clientsContainer.appendChild(card);
                         });
                     });
             }
             
-            // Load jobs on page load
-            loadJobs();
+            // Load clients on page load
+            loadclients();
             
             // Search on button click
             searchButton.addEventListener('click', () => {
-                loadJobs(searchInput.value);
+                loadclients(searchInput.value);
             });
             
             // Search on Enter key
             searchInput.addEventListener('keydown', e => {
-                if (e.key === 'Enter') loadJobs(searchInput.value);
+                if (e.key === 'Enter') loadclients(searchInput.value);
             });
             
             // NEW: Search on any key press with debounce
@@ -556,7 +556,7 @@ DEFAULT:'8px',
                 
                 // Set a new timeout to wait for user to stop typing
                 searchTimeout = setTimeout(() => {
-                    loadJobs(this.value);
+                    loadclients(this.value);
                 }, 300); // 300ms delay to avoid excessive API calls
             });
             
@@ -583,7 +583,7 @@ DEFAULT:'8px',
                 const filters = {
                     title: titleFilter.value,
                     location: locationFilter.value,
-                    jobTypes: []
+                    clientsTypes: []
                 };
                 
 
@@ -594,7 +594,7 @@ DEFAULT:'8px',
                 }
                 
                 // Apply filters and close panel
-                loadJobs(searchInput.value, filters);
+                loadclients(searchInput.value, filters);
                 closeFilterPanelHandler();
             });
             
@@ -610,8 +610,8 @@ DEFAULT:'8px',
 
                 experienceFilter.value = '';
                 
-                // Reload jobs without filters
-                loadJobs(searchInput.value);
+                // Reload clients without filters
+                loadclients(searchInput.value);
             });
         });
         
