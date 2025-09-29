@@ -50,6 +50,10 @@ def addJob():
 def addClient():
     return render_template('addClient.html')
 
+@app.route('/help')
+def help():
+    return render_template('help.html')
+
 @app.route('/account')
 def account():
     return render_template('account.html')
@@ -105,10 +109,15 @@ def add_job():
 def init_db2():
     mydatabase = sqlite3.connect('clients.db')
     database = mydatabase.cursor()
+
     database.execute('''CREATE TABLE IF NOT EXISTS jobs (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     title TEXT NOT NULL,
+                    company_email TEXT NOT NULL,
                     location TEXT NOT NULL,
+                    salary TEXT NOT NULL,
+                    duration TEXT NOT NULL,
+                    experience TEXT NOT NULL,
                     job_type TEXT NOT NULL,
                     description TEXT
                 )''')
@@ -124,14 +133,18 @@ def get_clients():
     if query:
         database.execute('''SELECT * FROM jobs WHERE 
                         title LIKE ? OR 
+                        company_email LIKE ? OR 
                         location LIKE ? OR 
+                        salary LIKE ? OR 
+                        duration LIKE ? OR 
+                        experience LIKE ? OR 
                         job_type LIKE ? OR 
                         description LIKE ?''',
-                  tuple([f"%{query}%"] * 4))
+                  tuple([f"%{query}%"] * 8))
     else:
         database.execute('SELECT * FROM jobs')
-    clients = [dict(id=row[0], title=row[1], location=row[2],
-                 job_type=row[3], description=row[4])
+    clients = [dict(id=row[0], title=row[1], company_email=row[2],
+                 location=row[3], salary=row[4], duration=row[5], experience=row[6], job_type=row[7], description=row[8])
             for row in database.fetchall()]
     mydatabase.close()
     return jsonify(clients)
@@ -141,10 +154,10 @@ def add_clients():
     clientdata = request.get_json()
     mydatabase = sqlite3.connect('clients.db')
     database = mydatabase.cursor()
-    database.execute('''INSERT INTO jobs (title, location, job_type, description)
-                 VALUES (?, ?, ?, ? )''',
-              (clientdata['title'], clientdata['location'],
-               clientdata['job_type'], clientdata['description']))
+    database.execute('''INSERT INTO jobs (title, company_email, location, salary, duration, experience, job_type, description)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+              (clientdata['title'], clientdata['company_email'], clientdata['location'],
+               clientdata['salary'], clientdata['duration'], clientdata['experience'], clientdata['job_type'], clientdata['description']))
     mydatabase.commit()
     mydatabase.close()
     return jsonify({'status': 'success'}), 201

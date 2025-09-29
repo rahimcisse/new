@@ -42,12 +42,6 @@ def addJob():
 @app.route('/account')
 def account():
     return render_template('account.html')
-@app.route('/clients')
-def addClient():
-    return render_template('Clients-Browse-Page.html')
-@app.route('/apply')
-def apply():
-    return render_template('apply.html')
 
 def init_db():
     conn = sqlite3.connect('jobs.db')
