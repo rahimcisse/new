@@ -6,812 +6,16 @@
     <title>Help & Support - iConnect</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',secondary:'#10b981'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link href='static/mainhelp.css' rel='stylesheet'>
 <style>
-    /* CSS Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --primary-color: #2563eb;
-    --primary-dark: #1d4ed8;
-    --secondary-color: #0891b2;
-    --secondary-dark: #0e7490;
-    --accent-color: #ea580c;
-    --accent-dark: #dc2626;
-    --success-color: #059669;
-    --warning-color: #d97706;
-    --error-color: #dc2626;
-    --text-primary: #1f2937;
-    --text-secondary: #6b7280;
-    --text-light: #9ca3af;
-    --bg-primary: #ffffff;
-    --bg-secondary: #f9fafb;
-    --bg-tertiary: #f3f4f6;
-    --border-color: #e5e7eb;
-    --border-light: #f3f4f6;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --transition: all 0.3s ease;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-    line-height: 1.6;
-    color: var(--text-primary);
-    background-color: var(--bg-primary);
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-}
-
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-    line-height: 1.2;
-    margin-bottom: 16px;
-}
-
-h1 {
-    font-size: 2.5rem;
-}
-
-h2 {
-    font-size: 2rem;
-}
-
-h3 {
-    font-size: 1.5rem;
-}
-
-p {
-    margin-bottom: 16px;
-    line-height: 1.5;
-}
-
-/* Header */
-.header {
-    background-color: var(--bg-primary);
-    box-shadow: var(--shadow-sm);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    transition: var(--transition);
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 0;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
-.logo i {
-    font-size: 1.75rem;
-}
-
-.nav {
-    display: flex;
-    gap: 32px;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: var(--text-secondary);
-    font-weight: 500;
-    transition: var(--transition);
-    position: relative;
-}
-
-.nav-link:hover {
-    color: var(--primary-color);
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -4px;
-    left: 0;
-    background-color: var(--primary-color);
-    transition: var(--transition);
-}
-
-.nav-link:hover::after {
-    width: 100%;
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: white;
-    padding: 120px 0 80px;
-    text-align: center;
-}
-
-.hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.hero-title {
-    font-size: 3rem;
-    margin-bottom: 16px;
-    font-weight: 700;
-}
-
-.hero-subtitle {
-    font-size: 1.25rem;
-    margin-bottom: 40px;
-    opacity: 0.9;
-}
-
-/* Search Container */
-.search-container {
-    margin-bottom: 48px;
-}
-
-.search-box {
-    position: relative;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.search-input {
-    width: 100%;
-    padding: 16px 24px 16px 56px;
-    border: none;
-    border-radius: var(--radius-lg);
-    font-size: 1.1rem;
-    box-shadow: var(--shadow-lg);
-    outline: none;
-    transition: var(--transition);
-}
-
-.search-input:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.search-icon {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-light);
-    font-size: 1.1rem;
-}
-
-/* Quick Links */
-.quick-links {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.quick-link-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-lg);
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: var(--transition);
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-}
-
-.quick-link-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-}
-
-/* Support Categories */
-.support-categories {
-    padding: 80px 0;
-    background-color: var(--bg-secondary);
-}
-
-.section-title {
-    text-align: center;
-    margin-bottom: 48px;
-    color: var(--text-primary);
-}
-
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 32px;
-}
-
-.category-card {
-    background-color: var(--bg-primary);
-    padding: 32px 24px;
-    border-radius: var(--radius-lg);
-    text-align: center;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-    cursor: pointer;
-    border: 1px solid var(--border-light);
-}
-
-.category-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-color);
-}
-
-.category-icon {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 24px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: white;
-}
-
-.category-title {
-    margin-bottom: 8px;
-    color: var(--text-primary);
-}
-
-.category-desc {
-    color: var(--text-secondary);
-    margin-bottom: 16px;
-}
-
-.article-count {
-    display: inline-block;
-    padding: 4px 12px;
-    background-color: var(--bg-tertiary);
-    color: var(--text-secondary);
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-/* FAQ Section */
-.faq-section {
-    padding: 80px 0;
-}
-
-.faq-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 48px;
-    flex-wrap: wrap;
-}
-
-.faq-tab {
-    padding: 12px 24px;
-    border: 2px solid var(--border-color);
-    background-color: var(--bg-primary);
-    color: var(--text-secondary);
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.faq-tab.active,
-.faq-tab:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: white;
-}
-
-.faq-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.faq-tab-content {
-    display: none;
-}
-
-.faq-tab-content.active {
-    display: block;
-}
-
-.faq-item {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    margin-bottom: 16px;
-    overflow: hidden;
-    transition: var(--transition);
-}
-
-.faq-item:hover {
-    border-color: var(--primary-color);
-}
-
-.faq-question {
-    width: 100%;
-    padding: 20px 24px;
-    background-color: var(--bg-primary);
-    border: none;
-    text-align: left;
-    cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: 500;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: var(--transition);
-}
-
-.faq-question:hover {
-    background-color: var(--bg-secondary);
-}
-
-.faq-question i {
-    transition: var(--transition);
-    color: var(--text-light);
-}
-
-.faq-item.active .faq-question i {
-    transform: rotate(180deg);
-    color: var(--primary-color);
-}
-
-.faq-answer {
-    padding: 0 24px;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.faq-item.active .faq-answer {
-    padding: 0 24px 20px;
-    max-height: 200px;
-}
-
-.faq-answer p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-}
-
-/* Contact Section */
-.contact-section {
-    padding: 80px 0;
-    background-color: var(--bg-secondary);
-}
-
-.contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: start;
-}
-
-.contact-methods h3,
-.contact-form-container h3 {
-    margin-bottom: 32px;
-    color: var(--text-primary);
-}
-
-.contact-method {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 32px;
-    padding: 24px;
-    background-color: var(--bg-primary);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-}
-
-.contact-method:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.method-icon {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.25rem;
-    flex-shrink: 0;
-}
-
-.method-content h4 {
-    margin-bottom: 4px;
-    color: var(--text-primary);
-}
-
-.method-content p {
-    color: var(--text-secondary);
-    margin-bottom: 4px;
-}
-
-.response-time {
-    font-size: 0.875rem;
-    color: var(--text-light);
-}
-
-.chat-btn {
-    margin-top: 8px;
-    padding: 8px 16px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.chat-btn:hover {
-    background-color: var(--accent-dark);
-}
-
-/* Contact Form */
-.contact-form-container {
-    background-color: var(--bg-primary);
-    padding: 40px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-}
-
-.form-group {
-    margin-bottom: 24px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--text-primary);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    transition: var(--transition);
-    background-color: var(--bg-primary);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-/* Resources Section */
-.resources-section {
-    padding: 80px 0;
-}
-
-.resources-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 32px;
-}
-
-.resource-card {
-    background-color: var(--bg-primary);
-    padding: 32px 24px;
-    border-radius: var(--radius-lg);
-    text-align: center;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-light);
-    transition: var(--transition);
-}
-
-.resource-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-}
-
-.resource-icon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 24px;
-    background: linear-gradient(135deg, var(--accent-color), var(--warning-color));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: white;
-}
-
-.resource-card h3 {
-    margin-bottom: 8px;
-    color: var(--text-primary);
-}
-
-.resource-card p {
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-}
-
-.resource-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    background-color: var(--primary-color);
-    color: white;
-    text-decoration: none;
-    border-radius: var(--radius-md);
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.resource-link:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
-}
-
-/* Footer */
-.footer {
-    background-color: var(--text-primary);
-    color: white;
-    padding: 64px 0 24px;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 64px;
-    margin-bottom: 48px;
-}
-
-.footer-brand .logo {
-    color: white;
-    margin-bottom: 16px;
-}
-
-.footer-brand p {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.footer-links {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-}
-
-.link-group h4 {
-    margin-bottom: 16px;
-    color: white;
-}
-
-.link-group a {
-    display: block;
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    margin-bottom: 8px;
-    transition: var(--transition);
-}
-
-.link-group a:hover {
-    color: white;
-}
-
-.footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 24px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 16px;
-    }
-
-    .header-content {
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .nav {
-        gap: 24px;
-    }
-
-    .hero {
-        padding: 100px 0 60px;
-    }
-
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1.1rem;
-    }
-
-    .quick-links {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .quick-link-btn {
-        width: 100%;
-        max-width: 300px;
-    }
-
-    .category-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
-    .faq-tabs {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .faq-tab {
-        width: 100%;
-        max-width: 200px;
-        text-align: center;
-    }
-
-    .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-
-    .contact-form-container {
-        padding: 24px;
-    }
-
-    .resources-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-
-    .footer-links {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    h2 {
-        font-size: 1.75rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-title {
-        font-size: 1.75rem;
-    }
-
-    .category-card,
-    .resource-card {
-        padding: 24px 16px;
-    }
-
-    .contact-method {
-        padding: 16px;
-    }
-
-    .support-categories,
-    .faq-section,
-    .contact-section,
-    .resources-section {
-        padding: 60px 0;
-    }
-}
-
-/* Animation Classes */
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.6s ease forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
-}
-
-.slide-up {
-    transform: translateY(30px);
-    opacity: 0;
-    animation: slideUp 0.6s ease forwards;
-}
-
-@keyframes slideUp {
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Utility Classes */
-.hidden {
-    display: none !important;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.mb-0 {
-    margin-bottom: 0 !important;
-}
 </style>
 </head>
 <body>
@@ -819,10 +23,7 @@ p {
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-link"></i>
-                    <span>iConnect</span>
-                </div>
+                <a href="#" class="text-2xl font-['Pacifico'] text-primary mr-10">Iconnect</a>
                 <nav class="nav">
                     <a href="index" class="nav-link">Home</a>
                     <a href="#faq" class="nav-link">FAQ</a>
@@ -840,13 +41,6 @@ p {
                 <h1 class="hero-title">How can we help you?</h1>
                 <p class="hero-subtitle">Find answers, get support, and make the most of iConnect</p>
                 
-                <!-- Search Bar -->
-                <div class="search-container">
-                    <div class="search-box">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" placeholder="Search for help articles..." class="search-input">
-                    </div>
-                </div>
 
                 <!-- Quick Links -->
                 <div class="quick-links">
@@ -1188,43 +382,82 @@ p {
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <i class="fas fa-link"></i>
-                        <span>iConnect</span>
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+                <div class="lg:col-span-2">
+                    <a href="#" class="text-2xl font-['Pacifico'] text-white mb-4 inline-block">Iconnect</a>
+                    <p class="text-gray-400 mb-6 max-w-md">Connecting skilled professionals with businesses looking for quality talent. Our platform makes it easy to find work or hire the perfect candidate.</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors">
+                            <i class="ri-facebook-fill"></i>
+                        </a>
+                        <a href="https://x.com" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors">
+                            <i class="ri-twitter-x-fill"></i>
+                        </a>
+                        <a href="https://www.linkedin.com" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors">
+                            <i class="ri-linkedin-fill"></i>
+                        </a>
+                        <a href="https://www.instagram.com" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors">
+                            <i class="ri-instagram-fill"></i>
+                        </a>
                     </div>
-                    <p>Connecting talent with opportunity</p>
                 </div>
                 
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h4>Support</h4>
-                        <a href="#faq">FAQ</a>
-                        <a href="#contact">Contact Us</a>
-                        <a href="#resources">Resources</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>Company</h4>
-                        <a href="#">About</a>
-                        <a href="#">Careers</a>
-                        <a href="#">Blog</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>Legal</h4>
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                        <a href="#">Cookie Policy</a>
-                    </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">For Workers</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Find Jobs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Create Profile</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Career Resources</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Success Stories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">For Clients</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Post a Job</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Browse Talent</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Enterprise Solutions</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Success Stories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Company</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
+                    </ul>
                 </div>
             </div>
             
-            <div class="footer-bottom">
-                <p>&copy; 2024 iConnect. All rights reserved.</p>
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-gray-400">&copy; 2025 IConnect. All rights reserved.</p>
+                    </div>
+                    
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Accessibility</a>
+                    </div>
+                    
+                    <div class="mt-4 md:mt-0 flex items-center space-x-3">
+                        <i class="ri-visa-fill ri-lg"></i>
+                        <i class="ri-mastercard-fill ri-lg"></i>
+                        <i class="ri-paypal-fill ri-lg"></i>
+                        <i class="ri-apple-fill ri-lg"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
