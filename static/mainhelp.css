@@ -884,4 +884,212 @@ p {
                 color: #f87171 !important;
             }
 
-            
+            /* ...existing code... */
+
+/* ...existing code... */
+
+/* --- DARK MODE OVERRIDES (MATCH about.html STYLE) --- */
+.dark body {
+    background-color: #111827;
+    color: #f3f4f6;
+}
+
+.dark .header {
+    background-color: #1F2937;
+    color: #f3f4f6;
+}
+
+.dark .nav-link {
+    color: #9CA3AF;
+}
+.dark .nav-link:hover {
+    color: #3b82f6;
+}
+.dark .nav-link::after {
+    background-color: #3b82f6;
+}
+
+.dark .hero {
+    background: linear-gradient(135deg, #1F2937 0%, #10b981 100%);
+    color: #f3f4f6;
+}
+
+.dark .quick-link-btn {
+    background-color: #23272f;
+    border-color: #23272f;
+    color: #f3f4f6;
+}
+.dark .quick-link-btn:hover {
+    background-color: #374151;
+    border-color: #3b82f6;
+}
+
+.dark .support-categories {
+    background-color: #1F2937;
+}
+
+.dark .section-title {
+    color: #f3f4f6;
+}
+
+.dark .category-card {
+    background-color: #1F2937;
+    color: #f3f4f6;
+    border-color: #374151;
+}
+.dark .category-card:hover {
+    border-color: #3b82f6;
+    background-color: #23272f;
+}
+
+.dark .category-title {
+    color: #f3f4f6;
+}
+.dark .category-desc {
+    color: #9CA3AF;
+}
+.dark .article-count {
+    background-color: #23272f;
+    color: #9CA3AF;
+}
+
+.dark .faq-section {
+    background-color: #111827;
+}
+
+.dark .faq-tab {
+    background-color: #23272f;
+    color: #9CA3AF;
+    border-color: #374151;
+}
+.dark .faq-tab.active,
+.dark .faq-tab:hover {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+.dark .faq-item {
+    border-color: #374151;
+    background-color: #23272f;
+}
+.dark .faq-question {
+    background-color: #23272f;
+    color: #f3f4f6;
+}
+.dark .faq-question:hover {
+    background-color: #18181b;
+}
+.dark .faq-question i {
+    color: #9CA3AF;
+}
+.dark .faq-item.active .faq-question i {
+    color: #3b82f6;
+}
+.dark .faq-answer p {
+    color: #9CA3AF;
+}
+
+.dark .contact-section {
+    background-color: #1F2937;
+}
+.dark .contact-method {
+    background-color: #23272f;
+    color: #f3f4f6;
+}
+.dark .method-content h4 {
+    color: #f3f4f6;
+}
+.dark .method-content p {
+    color: #9CA3AF;
+}
+.dark .response-time {
+    color: #6B7280;
+}
+.dark .chat-btn {
+    background-color: #3b82f6;
+}
+.dark .chat-btn:hover {
+    background-color: #2563eb;
+}
+
+.dark .contact-form-container {
+    background-color: #18181b;
+    color: #f3f4f6;
+}
+.dark .form-group label {
+    color: #f3f4f6;
+}
+.dark .form-group input,
+.dark .form-group select,
+.dark .form-group textarea {
+    background-color: #23272f;
+    color: #f3f4f6;
+    border-color: #374151;
+}
+.dark .form-group input:focus,
+.dark .form-group select:focus,
+.dark .form-group textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.dark .submit-btn {
+    background: linear-gradient(135deg, #3b82f6, #10b981);
+    color: #fff;
+}
+
+.dark .resources-section {
+    background-color: #111827;
+}
+.dark .resource-card {
+    background-color: #1F2937;
+    color: #f3f4f6;
+    border-color: #374151;
+}
+.dark .resource-card h3 {
+    color: #f3f4f6;
+}
+.dark .resource-card p {
+    color: #9CA3AF;
+}
+.dark .resource-link {
+    background-color: #3b82f6;
+    color: #fff;
+}
+.dark .resource-link:hover {
+    background-color: #2563eb;
+}
+
+.dark .footer {
+    background-color: #1F2937;
+    color: #f3f4f6;
+}
+.dark .footer-brand .logo,
+.dark .link-group h4 {
+    color: #f3f4f6;
+}
+.dark .footer-brand p,
+.dark .link-group a {
+    color: #9CA3AF;
+}
+.dark .link-group a:hover {
+    color: #3b82f6;
+}
+.dark .footer-bottom {
+    border-top: 1px solid #374151;
+    color: #6B7280;
+}
+
+/* Dark mode icon color transition */
+/* ...existing code... */
+
+#themeIcon {
+    transition: color 0.3s;
+    color: #3b82f6;
+}
+.dark #themeIcon {
+    color: #fff !important; /* white in dark mode */
+}
+/* ...existing code... */
+/* ...existing code... */
