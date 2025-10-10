@@ -1,5 +1,6 @@
 # new animated signup
 # Extend Flask backend to support search functionality
+from email.mime.text import MIMEText
 from flask import Flask, request, jsonify, render_template, redirect, url_for,session
 import sqlite3
 from datetime import datetime
@@ -392,6 +393,68 @@ def update_profile_details():
     db.session.commit()
     
     return jsonify({'message': 'Profile details updated successfully'})
+
+def init_db3():
+    conn = sqlite3.connect('messages.db')
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            email TEXT,
+            userType TEXT,
+            category TEXT,
+            subject TEXT,
+            message TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+init_db3()
+
+@app.route('/help', methods=['GET'])
+def help_page():
+    return render_template('help.html')
+
+
+
+
+def send_email(subject, body, to_email):
+    # Configure your SMTP server and credentials
+    smtp_server = 'smtp.gmail.com'
+    smtp_port = 587
+    smtp_user = EMAIL_ADDRESS      # Replace with your email
+    smtp_password = EMAIL_PASSWORD     # Use an app password, not your main password
+
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = smtp_user
+    msg['To'] = to_email
+
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        server.send_message(msg)
+
+@app.route('/submit_message', methods=['POST'])
+def submit_message():
+    data = request.json
+    # ...save to database as before...
+
+    # Prepare email content
+    subject = f"New Contact Message from {data['name']}"
+    body = f"""
+    Name: {data['name']}
+    Email: {data['email']}
+    User Type: {data['userType']}
+    Category: {data['category']}
+    Subject: {data['subject']}
+    Message: {data['message']}
+    """
+    send_email(subject, body, EMAIL_ADDRESS)  # Replace with your email
+
+    return jsonify({'status': 'success'})
 
 # New route for the details page
 @app.route('/details')

@@ -855,36 +855,44 @@ function toggleFaqItem(item) {
 // Handle contact form submission
 function handleContactFormSubmit(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(contactForm);
     const data = Object.fromEntries(formData);
-    
+
     // Add loading state to submit button
     const submitBtn = contactForm.querySelector('.submit-btn');
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     submitBtn.disabled = true;
-    
-    // Simulate form submission
-    setTimeout(() => {
-        // Reset button
-        submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-        submitBtn.style.backgroundColor = 'var(--success-color)';
-        
-        setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            submitBtn.style.backgroundColor = '';
-            contactForm.reset();
-            
-            // Show success message
-            showNotification('Your message has been sent successfully! We\'ll get back to you within 24 hours.', 'success');
-        }, 2000);
-    }, 1500);
-    
-    console.log('Form submitted:', data);
-}
 
+    // Send data to backend
+    fetch('/submit_message', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.status === 'success') {
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+            submitBtn.style.backgroundColor = 'var(--success-color)';
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                submitBtn.style.backgroundColor = '';
+                contactForm.reset();
+                showNotification('Your message has been sent successfully! We\'ll get back to you within 24 hours.', 'success');
+            }, 2000);
+        } else {
+            throw new Error('Failed to send');
+        }
+    })
+    .catch(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        showNotification('There was an error sending your message. Please try again.', 'error');
+    });
+}
 // Handle chat button click
 function handleChatBtnClick() {
     // Simulate starting a chat
