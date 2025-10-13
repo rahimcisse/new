@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IConnect - Connect with the World</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='1.ico') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .gradient-bg {
@@ -97,7 +98,7 @@
                                 </div>
                             </div>
                             <div class="flex justify-end mt-1">
-                                <a href="#" class="text-sm text-white hover:underline">Forgot password?</a>
+                                <a data-target="ForgetPasswordForm" class="text-sm text-white hover:underline">Forgot password?</a>
                             </div>
                         </div>
                     </div>
@@ -111,6 +112,9 @@
                         <span class="toggle-forms font-semibold text-white hover:text-purple-200" data-target="signupForm">Sign up</span>
                     </div>
                 </form>
+
+                
+
                 
                 <!-- Signup Form (hidden by default) -->
                 <form id="signupForm" class="space-y-6 hidden">
@@ -137,7 +141,7 @@
                             </div>
                         </div>
 
-                        <button onclick="sendOTP()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-4">
+                        <button onclick="sendOTP()" class="w-full bg-white text-purple-600 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition duration-300">
                          Send OTP
                         </button>
                             <div id="otpSection" class="hidden">
@@ -188,7 +192,46 @@
                         Already have an account? 
                         <span class="toggle-forms font-semibold text-white hover:text-purple-200" data-target="loginForm">Sign in</span>
                     </div>
-                </form>
+                </form><!-- ...existing code... -->
+<form id="ForgetPasswordForm" class="space-y-6 hidden">
+    <h2 class="text-2xl font-bold text-white mb-6">Reset Password</h2>
+    <div class="space-y-4">
+        <div>
+            <label for="forgotEmail" class="block text-sm font-medium text-white mb-1">Email</label>
+            <div class="relative">
+                <input type="email" id="forgotEmail" class="input-field w-full pl-10 pr-4 py-3 rounded-lg bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none" placeholder="your@email.com" required>
+            </div>
+        </div>
+        <button type="button" onclick="sendForgotOTP()" class="w-full bg-white text-purple-600 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition duration-300">
+            Send OTP
+        </button>
+        <div id="forgotOtpSection" class="hidden">
+            <input id="forgotOtpCode" type="text" placeholder="Enter OTP"
+                class="w-full p-2 border border-gray-300 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+<!-- ...existing code... -->
+<div>
+    <label for="forgotNewPassword" class="block text-sm font-medium text-white mb-1">New Password</label>
+    <input type="password" id="forgotNewPassword" autocomplete="new-password"
+        class="input-field w-full py-3 rounded-lg bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none"
+        placeholder="New password" required>
+</div>
+<div>
+    <label for="forgotConfirmPassword" class="block text-sm font-medium text-white mb-4"></label>
+    <input type="password" id="forgotConfirmPassword" autocomplete="new-password"
+        class="input-field w-full py-3 rounded-lg bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none"
+        placeholder="Confirm password" required>
+</div>
+<!-- ...existing code... -->
+        </div>
+    </div>
+    <button type="submit" class="w-full bg-white text-purple-600 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition duration-300">
+        Reset Password
+    </button>
+    <div class="text-center text-white text-sm">
+        <span class="toggle-forms font-semibold text-white hover:text-purple-200" data-target="loginForm">Back to Login</span>
+    </div>
+</form>
+<!-- ...existing code... -->
             </div>
         </div>
     </div>
@@ -201,14 +244,11 @@
         </div>
     </div>
 
-<!DOCTYPE html>
-<html lang="en">
-<!-- ... [rest of your HTML remains the same until the JavaScript section] ... -->
-
 <script>
     // DOM Elements
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
+    const forgetPasswordForm = document.getElementById('ForgetPasswordForm');
     const toggleForms = document.querySelectorAll('.toggle-forms');
     const toggleLoginPassword = document.getElementById('toggleLoginPassword');
     const toggleSignupPassword = document.getElementById('toggleSignupPassword');
@@ -219,13 +259,95 @@
     const otpSection = document.getElementById('otpSection');
     const otpCode = document.getElementById('otpcode');
 
-    // Toggle between login and signup forms
-    toggleForms.forEach(button => {
-        button.addEventListener('click', function() {
-            loginForm.classList.toggle('hidden');
-            signupForm.classList.toggle('hidden');
-        });
+    // ...existing code...
+// Add this after your DOM Elements section
+document.querySelectorAll('a[data-target="ForgetPasswordForm"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        loginForm.classList.add('hidden');
+        signupForm.classList.add('hidden');
+        forgetPasswordForm.classList.remove('hidden');
     });
+});
+// ...existing code...
+// ...existing code...
+
+// Send OTP for Forgot Password
+async function sendForgotOTP() {
+    showToast('Sending OTP...');
+    document.getElementById('forgotOtpSection').classList.remove('hidden');
+    const email = document.getElementById('forgotEmail').value;
+    if (!email) {
+        showToast('Please enter your email', true);
+        return;
+    }
+    const response = await fetch('/send-forgot-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+    const data = await response.json();
+    if (response.ok) {
+        showToast('OTP sent to your email!');
+        document.getElementById('forgotOtpSection').classList.remove('hidden');
+    } else {
+        showToast(data.error || 'Failed to send OTP', true);
+    }
+}
+
+// Handle Forgot Password Form Submission
+document.getElementById('ForgetPasswordForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('forgotEmail').value;
+    const otp = document.getElementById('forgotOtpCode').value;
+    const newPassword = document.getElementById('forgotNewPassword').value;
+    const confirmPassword = document.getElementById('forgotConfirmPassword').value;
+
+    if (!otp) {
+        showToast('Please enter the OTP sent to your email', true);
+        return;
+    }
+    if (newPassword.length < 8 || !/\d/.test(newPassword)) {
+        showToast('Password must be at least 8 characters with at least one number', true);
+        return;
+    }
+    if (newPassword !== confirmPassword) {
+        showToast('Passwords do not match', true);
+        return;
+    }
+
+    const response = await fetch('/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp, newPassword })
+    });
+    const data = await response.json();
+    if (response.ok) {
+        showToast('Password reset successful!');
+        this.reset();
+        document.getElementById('forgotOtpSection').classList.add('hidden');
+        loginForm.classList.remove('hidden');
+        forgetPasswordForm.classList.add('hidden');
+    } else {
+        showToast(data.error || 'Failed to reset password', true);
+    }
+});
+// ...existing code...
+// ...existing code...
+
+// Toggle between forms (login, signup, forget password)
+toggleForms.forEach(button => {
+    button.addEventListener('click', function() {
+        const target = this.getAttribute('data-target');
+        loginForm.classList.add('hidden');
+        signupForm.classList.add('hidden');
+        forgetPasswordForm.classList.add('hidden');
+        if (target === 'loginForm') loginForm.classList.remove('hidden');
+        if (target === 'signupForm') signupForm.classList.remove('hidden');
+        if (target === 'ForgetPasswordForm') forgetPasswordForm.classList.remove('hidden');
+    });
+});
+
 
         function showToast(message, isError = false) {
       const toast = document.getElementById('toast');
@@ -244,6 +366,7 @@
 
     async function sendOTP() {
       const email = document.getElementById('signupEmail').value;
+      showToast('Sending OTP...');
       document.getElementById('otpSection').classList.remove('hidden');
 
       if (!email) {

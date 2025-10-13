@@ -462,6 +462,71 @@ def details():
     if 'user_id' not in session:
         return redirect('/login_page')
     return render_template('details.html')
+
+
+
+# ...existing code...
+
+import string
+
+# Store OTPs in memory for demo (use a DB or cache in production)
+otp_store = {}
+
+@app.route('/send-forgot-otp', methods=['POST'])
+def send_forgot_otp():
+    data = request.get_json()
+    email = data.get('email')
+    user = User.query.filter_by(email=email).first()
+    
+    if not user:
+        return jsonify({'error': 'Email not registered'}), 404
+
+    otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+    otp_store[email] = otp
+
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = "Password Reset OTP - ICONNECT"
+        msg['From'] = EMAIL_ADDRESS
+        msg['To'] = email
+        msg.set_content(f"Your password reset OTP is: {otp}")
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+
+        return jsonify({'message': 'OTP sent successfully'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    data = request.get_json()
+    email = data.get('email')
+    otp = data.get('otp')
+    new_password = data.get('newPassword')
+
+    if not all([email, otp, new_password]):
+        return jsonify({'error': 'Missing fields'}), 400
+
+    if otp_store.get(email) != otp:
+        return jsonify({'error': 'Invalid OTP'}), 400
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    user.set_password(new_password)
+    db.session.commit()
+    otp_store.pop(email, None)
+    return jsonify({'message': 'Password reset successful'})
+
+# ...existing code...
+
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
